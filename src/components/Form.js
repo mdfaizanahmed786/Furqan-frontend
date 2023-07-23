@@ -11,8 +11,9 @@ import Slide from '@mui/material/Slide';
 
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
-import { Button, Divider, Typography } from '@mui/material';
+import { Button, CircularProgress, Divider, Typography } from '@mui/material';
 import Link from '@mui/material/Link';
+import { useQuery } from '@tanstack/react-query';
 function TransitionLeft(props) {
   return <Slide {...props} direction="left" />;
 }
@@ -47,6 +48,13 @@ const Form = () => {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+
+  const {data, isLoading}=useQuery({
+    queryKey:['getForms'],
+    queryFn:()=>fetch('http://localhost:5000/v1/form').then(res=>res.json())
+
+  })
   
   return (
     <>
@@ -63,50 +71,26 @@ const Form = () => {
         </Grid>
        
       </Grid>
-<List>
+      {isLoading && <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'40px'}}><CircularProgress /></div> }
+      <List>
+{data && data.map((item)=>(
+<div key={item._id}>
   <ListItem>
-    <ListItemText primary='Math with python Admission'/>
+    <ListItemText primary={item.name}/>
     <Link href='/AllForms'>
     <Button  onClick={handleClick(TransitionLeft)} variant="contained" size="small">
           Mwp
         </Button></Link>
   </ListItem>
   <Divider/>
-  <ListItem>
-    <ListItemText primary='Recruitment'/>
-    <Button variant="contained" size="small">
-          DSTR
-        </Button>
-  </ListItem>
-  
-  <Divider/>
+  </div>))}
 
-  <ListItem>
-    <ListItemText primary='Front End development Admissions'/>
-    <Button variant="contained" size="small">
-          FEDI
-        </Button>
-  </ListItem>
-  <Divider/>
 
-  <ListItem>
-    <ListItemText primary='Full Stack Development Admission'/>
-    <Button variant="contained" size="small">
-FSDI        </Button>
-  <Divider/>
-  </ListItem>  <Divider/> <ListItem>
-    <ListItemText primary='Data Science Admission'/>
-    <Button variant="contained" size="small">
-          DS
-        </Button>
- 
-  </ListItem>  <Divider/> <ListItem>
-    <ListItemText primary='Mathematics Admission'/>
-    <Button variant="contained" size="small">
-          DSTM
-        </Button>
-  </ListItem>
-</List>
+  </List>
+
+
+
+
     </Box>
     
     <Snackbar
