@@ -8,24 +8,40 @@ import { styled } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import Grid from '@mui/material/Grid';
 import MiniDrawer from './MiniDrawer';
-import { Box } from '@mui/material';
+import { Box, CircularProgress } from '@mui/material';
 import { Button, Typography } from '@mui/material';
+import { useQuery } from '@tanstack/react-query';
+import { useParams } from 'react-router-dom';
 
 export default function CheckboxListSecondary() {
-  const [checked, setChecked] = React.useState([1]);
+ 
+  const params = useParams();
+  const {data, isLoading}=useQuery({
+    queryKey:['getForms'],
+    queryFn:()=>fetch('http://localhost:5000/v1/form').then(res=>res.json())
+
+  })
+
+
+  const {data:faculty, isLoading:facultyLoading}=useQuery({
+    queryKey:['getFaculty'],
+    queryFn:()=>fetch(`http://localhost:5000/v1/faculty/get/${params.id}`).then(res=>res.json()),
+    enabled:!!params.id
+
+  })
+
+  console.log(faculty)
+
+ 
 
   const handleToggle = (value) => () => {
-    const currentIndex = checked.indexOf(value);
-    const newChecked = [...checked];
-
-    if (currentIndex === -1) {
-      newChecked.push(value);
-    } else {
-      newChecked.splice(currentIndex, 1);
-    }
-
-    setChecked(newChecked);
+    console.log(faculty)
+     
   };
+
+
+
+
   const Item = styled(Paper)(({ theme }) => ({
     backgroundColor: theme.palette.mode === 'dark' ? '#1A2027' : '#fff',
     ...theme.typography.body2,
@@ -33,6 +49,12 @@ export default function CheckboxListSecondary() {
     textAlign: 'center',
     color: theme.palette.text.secondary,
   }));
+
+
+
+  
+
+
   return (<>
     <MiniDrawer/>
     <Box sx={{marginLeft:40 , marginTop:20}}>
@@ -46,25 +68,30 @@ export default function CheckboxListSecondary() {
         </Grid>
        
       </Grid>
+      {isLoading && <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'40px'}}><CircularProgress /></div>
+}
     <List dense sx={{ width: '70%', bgcolor: 'background.paper' }}>
-      {[0 , 1, 2, 3].map((value) => {
-        const labelId = `checkbox-list-secondary-label-${value}`;
+   
+
+      {data && data.map((value) => {
+  
         return (
           <ListItem
-            key={value}
+            key={value._id}
             secondaryAction={
               <Checkbox
                 edge="end"
                 onChange={handleToggle(value)}
-               
-                inputProps={{ 'aria-labelledby': labelId }}
+                checked={faculty?.forms?.map(item=>item._id)?.includes(value._id)}
+             
+            
               />
             }
             disablePadding
           >
               <ListItemButton>
               
-              <ListItemText  primary="Math With Python" />
+              <ListItemText primary={value.name} />
 
             </ListItemButton>
           </ListItem>
