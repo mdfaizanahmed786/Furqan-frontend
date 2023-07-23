@@ -17,7 +17,7 @@ function App() {
             <Route path="/AllForms" exact element={<AllForms />} />
 
             <Route path="/AssignForms" exact element={<AssignForms />} />
-            <Route path="/EditAssignForm" exact element={<EditAssignForm />} />
+            <Route path="/EditAssignForm/:id" exact element={<EditAssignForm />} />
           </Routes>
         </BrowserRouter>
       </QueryClientProvider>
