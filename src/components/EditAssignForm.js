@@ -24,13 +24,13 @@ export default function CheckboxListSecondary() {
 
 
   const {data:faculty, isLoading:facultyLoading}=useQuery({
-    queryKey:['getFaculty'],
+    queryKey:['getSingleFaculty'],
     queryFn:()=>fetch(`http://localhost:5000/v1/faculty/get/${params.id}`).then(res=>res.json()),
     enabled:!!params.id
 
   })
 
-  console.log(faculty)
+
 
  
 
@@ -68,12 +68,16 @@ export default function CheckboxListSecondary() {
         </Grid>
        
       </Grid>
-      {isLoading && <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'40px'}}><CircularProgress /></div>
+      {isLoading  && <div style={{display:'flex', justifyContent:'center', alignItems:'center', marginTop:'40px'}}><CircularProgress /></div>
+
+     
 }
-    <List dense sx={{ width: '70%', bgcolor: 'background.paper' }}>
+
+   <List dense sx={{ width: '70%', bgcolor: 'background.paper' }}>
    
 
       {data && data.map((value) => {
+     
   
         return (
           <ListItem
@@ -82,7 +86,7 @@ export default function CheckboxListSecondary() {
               <Checkbox
                 edge="end"
                 onChange={handleToggle(value)}
-                checked={faculty?.forms?.map(item=>item._id)?.includes(value._id)}
+                checked={faculty ? faculty.forms.find(item=>item._id===value._id) : false}
              
             
               />

@@ -41,12 +41,12 @@ export default function AssignForms() {
   
   })
 
-const rows=data?.map((item, i)=>({
+const rows=data ? data?.map((item, i)=>({
   id:item._id,
   rowValue:i+1,
   name:item.name,
 
-}))
+})) : []
 
   
 
