@@ -12,6 +12,7 @@ import React, { useState } from "react";
 import MiniDrawer from "./MiniDrawer";
 import { QueryClient, useMutation } from "@tanstack/react-query";
 import { useNavigate } from "react-router-dom";
+import { toast } from "react-hot-toast";
 const AllForms = () => {
   const queryClient = new QueryClient();
   const navigate = useNavigate();
@@ -54,6 +55,7 @@ const AllForms = () => {
     mutationFn:addForm,
     onSuccess:()=>{
       queryClient.invalidateQueries('getForms')
+      toast.success('Form added successfully')
       navigate('/')
 
     }

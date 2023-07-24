@@ -6,6 +6,7 @@ import Form from "./components/Form";
 import AssignForms from "./components/AssignForms";
 import EditAssignForm from "./components/EditAssignForm";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { Toaster } from "react-hot-toast";
 const queryClient = new QueryClient();
 function App() {
   return (
@@ -20,6 +21,10 @@ function App() {
             <Route path="/EditAssignForm/:id" exact element={<EditAssignForm />} />
           </Routes>
         </BrowserRouter>
+        <Toaster
+  position="top-right"
+  reverseOrder={false}
+/>
       </QueryClientProvider>
     </div>
   );
